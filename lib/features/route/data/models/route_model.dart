@@ -12,7 +12,6 @@ class RouteModel extends RouteEntity {
 
   factory RouteModel.fromJson(Map<String, dynamic> json) {
     List<RouteType> routeTypes = [];
-    print(json);
 
     for (String routeType in json['routeType']) {
       if (routeType == 'Gastronomía') {

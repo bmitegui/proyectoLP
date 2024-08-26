@@ -27,11 +27,9 @@ class RoutesBloc extends Bloc<RoutesEvent, RoutesState> {
 
     final failureOrListRoutes = await getRoutesUseCase(NoParams());
     failureOrListRoutes.fold((failure) {
-      print('algun fallo');
       emit(RoutesError(message: _mapFailureToMessage(failure)));
       emit(RoutesLoaded(routes: []));
     }, (routes) async {
-      print('a');
       emit(RoutesLoaded(routes: routes));
     });
   }

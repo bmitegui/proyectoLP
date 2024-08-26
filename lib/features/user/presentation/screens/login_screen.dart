@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_finder/core/injection_container.dart';
 import 'package:path_finder/core/theme/app_theme.dart';
 import 'package:path_finder/core/widgets/custom_button_widget.dart';
 import 'package:path_finder/features/user/presentation/bloc/user/user_bloc.dart';

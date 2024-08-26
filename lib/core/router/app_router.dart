@@ -4,6 +4,7 @@ import 'package:path_finder/core/injection_container.dart';
 import 'package:path_finder/core/screens/loading_screen.dart';
 import 'package:path_finder/core/router/router.dart';
 import 'package:path_finder/core/screens/start_screen.dart';
+import 'package:path_finder/features/route/presentation/screens/create_route_screen.dart';
 import 'package:path_finder/features/route/presentation/screens/home.dart';
 import 'package:path_finder/features/user/presentation/bloc/bloc.dart';
 import 'package:path_finder/features/user/presentation/screens/login_screen.dart';
@@ -24,7 +25,9 @@ final appRouter = GoRouter(
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
       GoRoute(
-          path: '/perfil', builder: (context, state) => const PerfilScreen())
+          path: '/perfil', builder: (context, state) => const PerfilScreen()),
+          GoRoute(
+          path: '/create-route', builder: (context, state) => const CreateRouteScreen())
     ],
     redirect: (context, state) async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -39,6 +42,9 @@ final appRouter = GoRouter(
         }
         if (isGoingTo == '/perfil') {
           return '/perfil';
+        }
+        if (isGoingTo == '/create-route') {
+          return '/create-route';
         }
       } else if (userBloc.state is UserUnauthenticated) {
         if (!seen) {

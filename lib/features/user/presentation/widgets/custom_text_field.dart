@@ -7,13 +7,15 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController textEditingController;
   final IconData iconData;
   final bool obscureText;
+  final int maxLines;
   const CustomTextField(
       {super.key,
       required this.title,
       required this.hintText,
       required this.textEditingController,
       required this.iconData,
-      this.obscureText = false});
+      this.obscureText = false,
+      this.maxLines = 1});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -46,6 +48,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       FocusScope(
           node: FocusScopeNode(),
           child: TextField(
+            maxLines: widget.maxLines,
               obscureText: (widget.obscureText) ? _obscureText : false,
               autofocus: false,
               onTapOutside: (event) => FocusScope.of(context).unfocus(),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_finder/core/theme/theme.dart';
-import 'package:path_finder/features/user/presentation/screens/perfil_screen.dart';
 
 class CustomBottomNavigationBarWidget extends StatefulWidget {
   final String page;

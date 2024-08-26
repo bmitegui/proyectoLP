@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path_finder/core/injection_container.dart';
 import 'package:path_finder/core/theme/theme_config.dart';
 import 'package:path_finder/core/widgets/custom_button_widget.dart';
@@ -51,30 +52,30 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              alignment: Alignment.center,
-                              child: Text.rich(
-                                  textAlign: TextAlign.start,
-                                  TextSpan(
-                                      text: 'Bienvenido de vuelta, ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                      children: [
-                                        TextSpan(
-                                            text:
-                                                '${state.user.firstName} ${state.user.lastName}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge!
-                                                .copyWith(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: teritoryColor_)),
-                                      ])),
-                            ),
+                                alignment: Alignment.center,
+                                child: Text.rich(
+                                    textAlign: TextAlign.start,
+                                    TextSpan(
+                                        text: 'Bienvenido de vuelta, ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold),
+                                        children: [
+                                          TextSpan(
+                                              text:
+                                                  '${state.user.firstName} ${state.user.lastName}',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .copyWith(
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: teritoryColor_))
+                                        ]))),
                             const SizedBox(height: 16),
                             Row(children: [
                               Expanded(
@@ -86,7 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       maxLines: 2)),
                               const SizedBox(width: 16),
                               CustomButtonWidget(
-                                  onTap: () {},
+                                  onTap: () {
+                                    GoRouter.of(context).go('/create-route');
+                                  },
                                   color: teritoryColor_,
                                   label: 'Comparte tu ruta!')
                             ]),
