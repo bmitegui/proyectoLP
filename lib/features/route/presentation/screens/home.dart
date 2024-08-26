@@ -104,34 +104,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text('Rutas disponibles',
                                 style: Theme.of(context).textTheme.titleMedium),
                             const SizedBox(height: 8),
-                            BlocConsumer<RoutesBloc, RoutesState>(listener:
-                                (BuildContext context, RoutesState state) {
-                              if (state is RoutesLoaded) {
-                                print("se carga${state.routes.length}");
-                              }
-                            }, builder: (context, state) {
-                              return (state is RoutesLoaded)
-                                  ? Expanded(
-                                      child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          controller: _scrollController,
-                                          itemCount: state.routes.length,
-                                          itemBuilder: (context, index) {
-                                            final route = state.routes[index];
-                                            return Padding(
-                                                padding: EdgeInsets.only(
-                                                    right: (index !=
-                                                            state.routes
-                                                                    .length -
-                                                                1)
-                                                        ? 16
-                                                        : 0),
-                                                child: RouteInfoWidget(
-                                                    route: route));
-                                          }))
-                                  : const Center(
-                                      child: CircularProgressIndicator());
-                            })
+                            BlocConsumer<RoutesBloc, RoutesState>(
+                                listener: (BuildContext context,
+                                    RoutesState state) {},
+                                builder: (context, state) {
+                                  return (state is RoutesLoaded)
+                                      ? Expanded(
+                                          child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              controller: _scrollController,
+                                              itemCount: state.routes.length,
+                                              itemBuilder: (context, index) {
+                                                final route =
+                                                    state.routes[index];
+                                                return Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: (index !=
+                                                                state.routes
+                                                                        .length -
+                                                                    1)
+                                                            ? 16
+                                                            : 0),
+                                                    child: RouteInfoWidget(
+                                                        route: route));
+                                              }))
+                                      : const Center(
+                                          child: CircularProgressIndicator());
+                                })
                           ]))
                   : const Center(child: CircularProgressIndicator());
             }),

@@ -1,3 +1,4 @@
+import 'package:path_finder/features/route/data/models/models.dart';
 import 'package:path_finder/features/route/domain/entities/entities.dart';
 
 class RouteModel extends RouteEntity {
@@ -8,10 +9,12 @@ class RouteModel extends RouteEntity {
       required super.routeDate,
       required super.startTime,
       required super.endTime,
-      required super.routeTypes});
+      required super.routeTypes,
+      required super.stops});
 
   factory RouteModel.fromJson(Map<String, dynamic> json) {
     List<RouteType> routeTypes = [];
+    List<StopEntity> stops = [];
 
     for (String routeType in json['routeType']) {
       if (routeType == 'Gastronomía') {
@@ -25,6 +28,10 @@ class RouteModel extends RouteEntity {
       }
     }
 
+    stops = (json['stops'] as List)
+        .map((stopJson) => StopModel.fromJson(stopJson))
+        .toList();
+
     return RouteModel(
         id: 'id',
         name: json['name'],
@@ -32,6 +39,7 @@ class RouteModel extends RouteEntity {
         routeDate: DateTime.parse(json['routeDate']),
         startTime: json['startTime'],
         endTime: json['endTime'],
-        routeTypes: routeTypes);
+        routeTypes: routeTypes,
+        stops: stops);
   }
 }

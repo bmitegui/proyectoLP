@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:path_finder/features/route/domain/entities/entities.dart';
 
 enum RouteType { gastronomia, ciudad, aventura, cultura }
 
@@ -10,6 +11,7 @@ class RouteEntity extends Equatable {
   final String startTime;
   final String endTime;
   final List<RouteType> routeTypes;
+  final List<StopEntity> stops;
 
   const RouteEntity(
       {required this.id,
@@ -18,7 +20,8 @@ class RouteEntity extends Equatable {
       required this.routeDate,
       required this.startTime,
       required this.endTime,
-      required this.routeTypes});
+      required this.routeTypes,
+      required this.stops});
 
   @override
   List<Object?> get props => [id];
