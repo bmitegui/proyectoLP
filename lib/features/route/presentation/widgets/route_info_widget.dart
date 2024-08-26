@@ -79,12 +79,12 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                                 );
                               })),
                       const SizedBox(height: 16),
-                      Text(widget.route.description,
-                          maxLines: 4,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium),
+                      Expanded(
+                          child: Text(widget.route.description,
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodyMedium)),
                       const SizedBox(height: 8),
-                      const Spacer(),
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                         Text(
                             DateFormat('dd/ MM /yy')
