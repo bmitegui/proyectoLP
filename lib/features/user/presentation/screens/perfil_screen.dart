@@ -23,9 +23,10 @@ class _PerfilScreenState extends State<PerfilScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            centerTitle: true,
             title: const Text('Perfil'),
             leading: IconButton(
-                onPressed: () => GoRouter.of(context).go('/home'),
+                onPressed: () => Navigator.pop(context),
                 icon: const Icon(Icons.arrow_back_ios))),
         body: BlocConsumer<UserBloc, UserState>(
             listener: (BuildContext context, UserState state) {

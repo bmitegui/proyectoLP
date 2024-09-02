@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/core/theme/theme.dart';
 import 'package:path_finder/features/route/domain/entities/entities.dart';
 
 class BuildRouteTypes extends StatelessWidget {
@@ -19,18 +20,24 @@ class BuildRouteTypes extends StatelessWidget {
               .textTheme
               .bodyMedium!
               .copyWith(fontWeight: FontWeight.bold)),
-      const SizedBox(height: 4),
+      const SizedBox(height: 16),
       Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
           children: RouteType.values.map((type) {
             return ChoiceChip(
-                label: Text(type.toString().split('.').last),
+                backgroundColor: Colors.white,
+                checkmarkColor: Colors.white,
+                label: Text(type.toString().split('.').last,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: selectedRouteTypes.contains(type)
+                            ? Colors.white
+                            : const Color.fromARGB(255, 0, 45, 49))),
                 selected: selectedRouteTypes.contains(type),
                 onSelected: (selected) {
                   onRouteTypeSelect(type);
                 },
-                selectedColor: const Color.fromRGBO(91, 125, 170, 1),
+                selectedColor: colorSeed,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.0)));
           }).toList())

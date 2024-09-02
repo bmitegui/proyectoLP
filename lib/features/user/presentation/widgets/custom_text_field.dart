@@ -44,11 +44,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     .bodyMedium!
                     .copyWith(fontWeight: FontWeight.bold))
           ])),
-      const SizedBox(height: 4),
+      const SizedBox(height: 8),
       FocusScope(
           node: FocusScopeNode(),
           child: TextField(
-            maxLines: widget.maxLines,
+              maxLines: widget.maxLines,
               obscureText: (widget.obscureText) ? _obscureText : false,
               autofocus: false,
               onTapOutside: (event) => FocusScope.of(context).unfocus(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/core/theme/app_theme.dart';
 
 class BuildDatePicker extends StatelessWidget {
   final String title;
@@ -32,7 +33,8 @@ class BuildDatePicker extends StatelessWidget {
               onDateChanged(pickedDate);
             }
           },
-          child: Text('${dateTime.day}/${dateTime.month}/${dateTime.year}'))
+          child: Text('${dateTime.day}/${dateTime.month}/${dateTime.year}',
+              style: Theme.of(context).textTheme.bodyMedium))
     ]);
   }
 }

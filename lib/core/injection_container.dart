@@ -64,6 +64,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton<GetRoutes>(
       () => GetRoutes(routeRepository: sl<RouteRepository>()));
+  sl.registerLazySingleton<CreateRoute>(
+      () => CreateRoute(routeRepository: sl<RouteRepository>()));
 
   //! Blocs
   sl.registerLazySingleton<UserBloc>(() => UserBloc(
@@ -72,6 +74,7 @@ Future<void> init() async {
       logoutUseCase: sl<Logout>(),
       checkUserAuthentication: sl<CheckUserAuthentication>()));
 
-  sl.registerLazySingleton<RoutesBloc>(
-      () => RoutesBloc(getRoutesUseCase: sl<GetRoutes>()));
+  sl.registerLazySingleton<RoutesBloc>(() => RoutesBloc(
+      getRoutesUseCase: sl<GetRoutes>(),
+      createRouteUseCase: sl<CreateRoute>()));
 }

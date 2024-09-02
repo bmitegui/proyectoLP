@@ -27,11 +27,7 @@ class BuildRangeSlider extends StatelessWidget {
                 max: 10,
                 divisions: 9,
                 label: value.round().toString(),
-                onChanged: (value) => onChanged(value),
-                thumbColor: const Color.fromRGBO(191, 141, 48, 1),
-                secondaryActiveColor: const Color.fromRGBO(45, 75, 115, 1),
-                activeColor: const Color.fromRGBO(191, 141, 48, 1),
-                inactiveColor: const Color.fromARGB(255, 137, 137, 137))),
+                onChanged: (value) => onChanged(value))),
         const SizedBox(width: 4),
         Text('$value m',
             style: Theme.of(context)

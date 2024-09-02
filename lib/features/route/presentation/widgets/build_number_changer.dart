@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/core/theme/app_theme.dart';
 
 class BuildNumberChanger extends StatelessWidget {
   final String title;
@@ -21,8 +22,12 @@ class BuildNumberChanger extends StatelessWidget {
                   .copyWith(fontWeight: FontWeight.bold))),
       Row(mainAxisSize: MainAxisSize.min, children: [
         IconButton(
-            icon:
-                const Icon(Icons.remove, color: Color.fromRGBO(45, 75, 115, 1)),
+            icon: Container(
+                decoration: BoxDecoration(
+                    border:
+                        Border.all(color: const Color.fromARGB(255, 0, 45, 49)),
+                    borderRadius: BorderRadius.circular(20)),
+                child: const Icon(Icons.remove, color: colorSeed)),
             onPressed: () {
               if (value - 1 != 0) {
                 onTap(value - 1);
@@ -30,7 +35,12 @@ class BuildNumberChanger extends StatelessWidget {
             }),
         Text('$value'),
         IconButton(
-            icon: const Icon(Icons.add, color: Color.fromRGBO(45, 75, 115, 1)),
+            icon: Container(
+                decoration: BoxDecoration(
+                    border:
+                        Border.all(color: const Color.fromARGB(255, 0, 45, 49)),
+                    borderRadius: BorderRadius.circular(20)),
+                child: const Icon(Icons.add, color: colorSeed)),
             onPressed: () => onTap(value + 1))
       ])
     ]);

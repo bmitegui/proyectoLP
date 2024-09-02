@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_finder/core/error/error.dart';
 import 'package:path_finder/core/usecases/usecase.dart';
@@ -9,10 +11,13 @@ part 'routes_state.dart';
 
 class RoutesBloc extends Bloc<RoutesEvent, RoutesState> {
   final GetRoutes getRoutesUseCase;
+  final CreateRoute createRouteUseCase;
 
-  RoutesBloc({required this.getRoutesUseCase}) : super(RoutesInitial()) {
+  RoutesBloc({required this.getRoutesUseCase, required this.createRouteUseCase})
+      : super(RoutesInitial()) {
     on<RoutesInitialEvent>(_onRoutesInitialEventRequest);
     on<GetRoutesEvent>(_onGetRoutesEventRequest);
+    on<CreateRouteEvent>(_onCreateRouteEventRequest);
   }
 
   Future<void> _onRoutesInitialEventRequest(
@@ -21,10 +26,25 @@ class RoutesBloc extends Bloc<RoutesEvent, RoutesState> {
     emit(RoutesLoaded(routes: []));
   }
 
+  Future<void> _onCreateRouteEventRequest(
+      CreateRouteEvent event, Emitter<RoutesState> emit) async {
+    emit(RoutesLoading());
+
+    final failureOrListRoutes = await createRouteUseCase(
+        CreateRouteParams(routeEntity: event.routeEntity, file: event.file));
+    failureOrListRoutes.fold((failure) {
+      emit(RoutesError(message: _mapFailureToMessage(failure)));
+      emit(RoutesLoaded(routes: event.listRoutes));
+    }, (route) async {
+      List<RouteEntity> routes = List.from(event.listRoutes);
+      routes.add(route);
+      emit(RoutesLoaded(routes: routes));
+    });
+  }
+
   Future<void> _onGetRoutesEventRequest(
       GetRoutesEvent event, Emitter<RoutesState> emit) async {
     emit(RoutesLoading());
-
     final failureOrListRoutes = await getRoutesUseCase(NoParams());
     failureOrListRoutes.fold((failure) {
       emit(RoutesError(message: _mapFailureToMessage(failure)));

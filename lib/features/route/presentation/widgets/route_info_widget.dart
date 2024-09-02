@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/core/theme/responsive_size.dart';
 import 'package:path_finder/core/theme/theme_config.dart';
 import 'package:path_finder/features/route/domain/entities/entities.dart';
 import 'package:intl/intl.dart';
@@ -40,8 +41,15 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                                   color: Colors.grey.shade200, width: 2),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20))),
-                          child: Image.asset('assets/img/placeholder.jpg',
-                              height: 150, fit: BoxFit.fitWidth)),
+                          child: FadeInImage.assetNetwork(
+                              placeholder: 'assets/img/placeholder.jpg',
+                              image: widget.route.urlImage,
+                              fit: BoxFit.fitWidth,
+                              imageErrorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                    child:
+                                        Icon(Icons.error, color: Colors.red));
+                              })),
                       const SizedBox(height: 8),
                       Text(widget.route.name,
                           maxLines: 2,
@@ -51,34 +59,30 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                               .bodyMedium!
                               .copyWith(fontWeight: FontWeight.bold)),
                       const SizedBox(height: 8),
-                      SizedBox(
-                          height: 16,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: widget.route.routeTypes.length,
-                              itemBuilder: (context, index) {
-                                final routeType =
-                                    widget.route.routeTypes[index];
-
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      right: (index !=
-                                              widget.route.routeTypes.length -
-                                                  1)
-                                          ? 8
-                                          : 0),
-                                  child: Icon(
-                                      (routeType == RouteType.aventura)
-                                          ? Icons.explore
-                                          : (routeType == RouteType.ciudad)
-                                              ? Icons.location_city
-                                              : (routeType == RouteType.cultura)
-                                                  ? Icons.museum
-                                                  : Icons.restaurant,
-                                      color: teritoryColor_),
-                                );
-                              })),
-                      const SizedBox(height: 16),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: widget.route.routeTypes.map((routeType) {
+                            return Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2),
+                                child: Icon(
+                                    (routeType == RouteType.aventura)
+                                        ? Icons.explore
+                                        : (routeType == RouteType.ciudad)
+                                            ? Icons.location_city
+                                            : (routeType == RouteType.cultura)
+                                                ? Icons.museum
+                                                : (routeType ==
+                                                        RouteType.gastronomia)
+                                                    ? Icons.restaurant
+                                                    : (routeType ==
+                                                            RouteType
+                                                                .naturaleza)
+                                                        ? Icons.nature
+                                                        : Icons.church,
+                                    color: teritoryColor_));
+                          }).toList()),
+                      const SizedBox(height: 8),
                       Expanded(
                           child: Text(widget.route.description,
                               maxLines: 4,
@@ -88,7 +92,7 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                         Text(
                             DateFormat('dd/ MM /yy')
-                                .format(widget.route.routeDate),
+                                .format(widget.route.initialDate),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.end,

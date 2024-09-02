@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:path_finder/core/theme/app_theme.dart';
 import 'package:path_finder/core/theme/responsive_size.dart';
 import 'package:path_finder/core/theme/theme_config.dart';
 import 'package:path_finder/core/widgets/custom_button_widget.dart';
@@ -18,12 +20,20 @@ class _RouteInfoScreenState extends State<RouteInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            titleSpacing: 0,
+            backgroundColor: colorSeed,
+            scrolledUnderElevation: 0,
+            centerTitle: false,
             title: Text(widget.routeEntity.name,
-                maxLines: 2, textAlign: TextAlign.start),
-            centerTitle: true,
+                maxLines: 2,
+                textAlign: TextAlign.start,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: Colors.white)),
             leading: IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back_ios))),
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.white))),
         body: Padding(
             padding: const EdgeInsets.all(16),
             child:
@@ -35,22 +45,29 @@ class _RouteInfoScreenState extends State<RouteInfoScreen> {
                       border: Border.all(color: Colors.grey.shade200, width: 2),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(20))),
-                  child: Image.asset('assets/img/placeholder.jpg',
-                      height: 200, fit: BoxFit.fitWidth)),
+                  child: Image.network(widget.routeEntity.urlImage,
+                      fit: BoxFit.fitWidth)),
               const SizedBox(height: 16),
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: widget.routeEntity.routeTypes.map((routeType) {
-                    return Icon(
-                        (routeType == RouteType.aventura)
-                            ? Icons.explore
-                            : (routeType == RouteType.ciudad)
-                                ? Icons.location_city
-                                : (routeType == RouteType.cultura)
-                                    ? Icons.museum
-                                    : Icons.restaurant,
-                        color: teritoryColor_,
-                        size: 32.rf(context));
+                    return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Icon(
+                            (routeType == RouteType.aventura)
+                                ? Icons.explore
+                                : (routeType == RouteType.ciudad)
+                                    ? Icons.location_city
+                                    : (routeType == RouteType.cultura)
+                                        ? Icons.museum
+                                        : (routeType == RouteType.gastronomia)
+                                            ? Icons.restaurant
+                                            : (routeType ==
+                                                    RouteType.naturaleza)
+                                                ? Icons.nature
+                                                : Icons.church,
+                            color: teritoryColor_,
+                            size: 32.rf(context)));
                   }).toList()),
               const SizedBox(height: 16),
               Text(widget.routeEntity.description),
@@ -61,7 +78,7 @@ class _RouteInfoScreenState extends State<RouteInfoScreen> {
               Column(
                   children: widget.routeEntity.stops.map((stop) {
                 final initialDate =
-                    '${stop.startTimeHour} ${(stop.startTimeHour > 12) ? 'pm' : 'am'}';
+                    DateFormat('hh:mm a').format(stop.initialDate);
 
                 return Padding(
                     padding: const EdgeInsets.only(bottom: 8),

@@ -4,16 +4,20 @@ import 'package:path_finder/core/theme/responsive_size.dart';
 class CustomButtonWidget extends StatelessWidget {
   final Function() onTap;
   final Color color;
+  final Color? colorText;
   final String label;
   final bool isEnabled;
   final IconData? iconData;
   final bool avaibleBorder;
+  final int? maxLines;
   const CustomButtonWidget(
       {super.key,
       required this.onTap,
       required this.color,
+      this.maxLines,
+      this.colorText,
       required this.label,
-      this.isEnabled =true,
+      this.isEnabled = true,
       this.avaibleBorder = false,
       this.iconData});
 
@@ -22,11 +26,14 @@ class CustomButtonWidget extends StatelessWidget {
     return TextButton.icon(
         onPressed: () => isEnabled ? onTap() : null,
         label: Text(label,
+            maxLines: maxLines,
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: avaibleBorder ? color : Colors.white),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: avaibleBorder
+                    ? color
+                    : (colorText != null)
+                        ? colorText
+                        : Colors.white),
             overflow: TextOverflow.ellipsis),
         style: ElevatedButton.styleFrom(
             backgroundColor: avaibleBorder

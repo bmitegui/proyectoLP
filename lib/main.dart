@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_finder/core/constants/environment.dart';
 import 'package:path_finder/core/injection_container.dart' as di;
 import 'package:path_finder/core/router/app_router.dart';
 import 'package:path_finder/core/theme/theme.dart';
@@ -10,6 +11,7 @@ import 'package:path_finder/features/user/presentation/bloc/bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
+  await Environment.initializeEnv();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(const MyApp()));
   userBloc.add(CheckAuthStatusEvent());

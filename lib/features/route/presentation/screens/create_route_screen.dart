@@ -1,8 +1,16 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_finder/core/theme/theme.dart';
 import 'package:path_finder/core/widgets/custom_button_widget.dart';
+import 'package:path_finder/features/route/domain/entities/entities.dart';
+import 'package:path_finder/features/route/presentation/bloc/routes/routes_bloc.dart';
 import 'package:path_finder/features/route/presentation/widgets/step1_create_route_widget.dart';
+import 'package:path_finder/features/route/presentation/widgets/step2_create_route_widget.dart';
+import 'package:path_finder/features/route/presentation/widgets/step3_create_route_widget.dart';
+import 'package:path_finder/features/route/presentation/widgets/step4_create_route_widget.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class CreateRouteScreen extends StatefulWidget {
   const CreateRouteScreen({super.key});
@@ -12,254 +20,221 @@ class CreateRouteScreen extends StatefulWidget {
 }
 
 class _CreateRouteState extends State<CreateRouteScreen> {
-  int _currentStep = 0;
-  String routeNameInput = '';
-  String routeDescriptionInput = '';
-  DateTime routeDateInput = DateTime.now();
-  int numberOfPeopleInput = 2;
-  int numberOfGuidesInput = 1;
-  double rangeAlertInput = 2;
-  bool showPlaceInfoInput = false;
-  String alertSoundInput = 'Sonido 1';
-  bool publicRouteInput = false;
-  // LatLng? meetingPointInput;
-  // List<Place> stopsInput = [];
-  // List<RouteType> routeTypesInput =
-  //     []; // Lista para tipos de ruta seleccionados
+  late int _currentStep;
+  late RouteEntity _routeEntity;
+  late TextEditingController _nameRoute;
+  late TextEditingController _descriptionRoute;
+  late File? _file;
 
-  // late final RouteService routeService;
+  @override
+  void initState() {
+    super.initState();
+    _file = null;
+    _currentStep = 0;
+    _nameRoute = TextEditingController();
+    _descriptionRoute = TextEditingController();
+    _routeEntity = RouteEntity(
+        id: '',
+        name: '',
+        description: '',
+        urlImage: '',
+        peopleNumber: 1,
+        guidesNumber: 1,
+        alertRange: 1,
+        showInfo: false,
+        alertSound: 'Sonido 1',
+        isPublic: false,
+        initialDate: DateTime.now(),
+        routeTypes: const [],
+        stops: const [],
+        latitude: 0,
+        longitude: 0);
+  }
 
-  // void createRoute() {
-  //   // Aquí puedes procesar los datos capturados y crear la nueva ruta
-  //   final TouristRoute newRoute = TouristRoute(
-  //     name: routeNameInput,
-  //     placesList: stopsInput,
-  //     currentPlaceIndex: 0,
-  //     numberPeople: numberOfPeopleInput,
-  //     numberGuides: numberOfGuidesInput,
-  //     routeIsPublic: publicRouteInput,
-  //     routeDate: routeDateInput,
-  //     startingPoint: meetingPointInput!,
-  //     startTime:
-  //         stopsInput.isNotEmpty ? stopsInput.first.startTime : TimeOfDay.now(),
-  //     endTime:
-  //         stopsInput.isNotEmpty ? stopsInput.last.endTime : TimeOfDay.now(),
-  //     image: 'no_image',
-  //     description: routeDescriptionInput,
-  //     hasStarted: false,
-  //     routeType: routeTypesInput, // Usar directamente la lista de RouteType
-  //   );
-
-  //   addPublicRoute(newRoute);
-
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     const SnackBar(content: Text("Ruta creada")),
-  //   );
-  //   Future.delayed(const Duration(seconds: 1), () {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (_) => const HomePage()),
-  //     );
-  //   });
-  // }
-
-  // Future<void> createRouteData(TouristRoute newRoute) async {
-  //   routeService = await RouteService.create();
-  //   await routeService.createData(newRoute);
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-            centerTitle: true,
-            title: const Text('Crear una nueva ruta'),
+            titleSpacing: 0,
+            backgroundColor: colorSeed,
+            scrolledUnderElevation: 0,
+            centerTitle: false,
+            title: Text('Crear una nueva ruta',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: Colors.white)),
             leading: IconButton(
-                onPressed: () => GoRouter.of(context).go('/home'),
-                icon: const Icon(Icons.arrow_back_ios))),
-        body: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-            child: Stepper(
-                key: ValueKey<int>(_currentStep),
-                currentStep: _currentStep,
-                onStepContinue: () {
-                  setState(() {
-                    // if (_currentStep == 0 && routeNameInput.isEmpty) {
-                    //   showSnackbar(
-                    //     context,
-                    //     "Debe ingresar el nombre de la ruta",
-                    //     "error",
-                    //   );
-                    // } else if (_currentStep == 1 && stopsInput.isEmpty) {
-                    //   showSnackbar(
-                    //     context,
-                    //     "Debe agregar al menos una parada",
-                    //     "error",
-                    //   );
-                    // } else if (_currentStep == 2 && meetingPointInput == null) {
-                    //   showSnackbar(
-                    //     context,
-                    //     "Debe seleccionar un punto de encuentro",
-                    //     "error",
-                    //   );
-                    // } else if (_currentStep < 3) {
-                    //   _currentStep++;
-                    // } else {
-                    //   createRoute();
-                    // }
-                  });
-                },
-                onStepCancel: () {
-                  setState(() {
-                    if (_currentStep > 0) {
-                      _currentStep--;
-                    }
-                  });
-                },
-                controlsBuilder:
-                    (BuildContext context, ControlsDetails details) {
-                  final isLastStep = _currentStep == 3;
-                  final isFirstStep = _currentStep == 0;
-                  return Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (!isFirstStep)
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.white))),
+        body: BlocConsumer<RoutesBloc, RoutesState>(
+            listener: (BuildContext context, RoutesState state) {
+          if (state is RoutesLoaded) {
+            showTopSnackBar(
+                Overlay.of(context),
+                const CustomSnackBar.success(
+                    message: 'Ruta creada exitosamente'));
+            Navigator.pop(context);
+          }
+        }, builder: (context, state) {
+          return (state is RoutesLoaded)
+              ? AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  child: Stepper(
+                      onStepTapped: (value) =>
+                          setState(() => _currentStep = value),
+                      key: ValueKey<int>(_currentStep),
+                      currentStep: _currentStep,
+                      onStepContinue: () => setState(() => _currentStep++),
+                      onStepCancel: () => setState(() {
+                            if (_currentStep > 0) {
+                              _currentStep--;
+                            }
+                          }),
+                      controlsBuilder:
+                          (BuildContext context, ControlsDetails details) {
+                        final isLastStep = _currentStep == 3;
+                        final isFirstStep = _currentStep == 0;
+                        return Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child:
+                                Row(mainAxisSize: MainAxisSize.max, children: [
+                              if (!isFirstStep)
+                                Expanded(
+                                    child: CustomButtonWidget(
+                                        onTap: () {
+                                          details.onStepCancel!();
+                                        },
+                                        color: teritoryColor_,
+                                        label: 'Atrás')),
+                              if (!isFirstStep) const SizedBox(width: 8),
                               Expanded(
-                                child: ElevatedButton(
-                                  onPressed: details.onStepCancel,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromRGBO(45, 75, 115, 1),
-                                  ),
-                                  child: const Text(
-                                    'Atrás',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            const SizedBox(width: 10),
-                            if (isFirstStep)
-                              SizedBox(
-                                  width: 275.rw(context),
                                   child: CustomButtonWidget(
                                       onTap: () {
-                                        details.onStepContinue!();
+                                        if (isLastStep) {
+                                          if (_canCreateARoute(
+                                              context: context)) {
+                                            _routeEntity =
+                                                _routeEntity.copyWith(
+                                                    name: _nameRoute.text,
+                                                    description:
+                                                        _descriptionRoute.text);
+                                            context.read<RoutesBloc>().add(
+                                                CreateRouteEvent(
+                                                    listRoutes: state.routes,
+                                                    routeEntity: _routeEntity,
+                                                    file: _file!));
+                                          }
+                                        } else {
+                                          details.onStepContinue!();
+                                        }
                                       },
                                       color: teritoryColor_,
-                                      label: 'Siguiente'))
-                            else
-                              Expanded(
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        // if (_currentStep == 1 && stopsInput.isEmpty) {
-                                        //   showSnackbar(
-                                        //     context,
-                                        //     "Debe agregar al menos una parada",
-                                        //     "error",
-                                        //   );
-                                        // } else if (_currentStep == 2 &&
-                                        //     meetingPointInput == null) {
-                                        //   showSnackbar(
-                                        //     context,
-                                        //     "Debe seleccionar un punto de encuentro",
-                                        //     "error",
-                                        //   );
-                                        // } else {
-                                        //   details.onStepContinue!();
-                                        // }
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color.fromRGBO(
-                                            45, 75, 115, 1),
-                                      ),
-                                      child: Text(
-                                          isLastStep
-                                              ? 'Crear ruta'
-                                              : 'Siguiente',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700))))
-                          ]));
-                },
-                steps: [
-                  Step(
-                    title: const Text('Información Inicial'),
-                    content: Step1CreateRouteWidget(),
-                    isActive: _currentStep >= 0,
-                  ),
-                  Step(
-                    title: const Text(
-                      'Agregar Paradas',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    content: Container(),
+                                      label: isLastStep
+                                          ? 'Crear ruta'
+                                          : 'Siguiente'))
+                            ]));
+                      },
+                      steps: [
+                        Step(
+                            title: Text('Información Inicial',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(fontWeight: FontWeight.bold)),
+                            content: Step1CreateRouteWidget(
+                                route: _routeEntity,
+                                file: _file,
+                                nameRoute: _nameRoute,
+                                descriptionRoute: _descriptionRoute,
+                                onChange: (route) =>
+                                    setState(() => _routeEntity = route),
+                                onPickImage: (value) =>
+                                    setState(() => _file = value)),
+                            isActive: _currentStep >= 0),
+                        Step(
+                            title: Text('Agregar Paradas',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(fontWeight: FontWeight.bold)),
+                            content: Step2CreateRouteWidget(
+                                routeEntity: _routeEntity,
+                                onChange: (route) =>
+                                    setState(() => _routeEntity = route)),
+                            isActive: _currentStep >= 1),
+                        Step(
+                            title: Text('Seleccionar Punto de Encuentro',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(fontWeight: FontWeight.bold)),
+                            content: Step3CreateRouteWidget(
+                                routeEntity: _routeEntity,
+                                onChange: (route) =>
+                                    setState(() => _routeEntity = route)),
+                            isActive: _currentStep >= 2),
+                        Step(
+                            title: Text('Confirmación',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(fontWeight: FontWeight.bold)),
+                            content: Step4CreateRouteWidget(
+                                name: _nameRoute.text,
+                                description: _descriptionRoute.text,
+                                routeEntity: _routeEntity,
+                                file: _file),
+                            isActive: _currentStep >= 3)
+                      ]))
+              : const Center(child: CircularProgressIndicator());
+        }));
+  }
 
-                    //  RouteStep2(
-                    //   stops: stopsInput,
-                    //   onStopsChanged: (value) => setState(() {
-                    //     stopsInput = value;
-                    //   }),
-                    // ),
-                    isActive: _currentStep >= 1,
-                  ),
-                  Step(
-                    title: const Text(
-                      'Seleccionar Punto de Encuentro',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    content: Container(),
-                    //  RouteStep3(
-                    //   meetingPoint: meetingPointInput,
-                    //   onMeetingPointChanged: (value) => setState(() {
-                    //     meetingPointInput = value;
-                    //   }),
-                    // ),
-                    isActive: _currentStep >= 2,
-                  ),
-                  Step(
-                      title: const Text(
-                        'Confirmación',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      content: Container(),
-                      // RouteStep4(
-                      //   routeName: routeNameInput,
-                      //   routeDescription: routeDescriptionInput,
-                      //   routeDate: routeDateInput,
-                      //   numberOfPeople: numberOfPeopleInput,
-                      //   numberOfGuides: numberOfGuidesInput,
-                      //   rangeAlert: rangeAlertInput,
-                      //   showPlaceInfo: showPlaceInfoInput,
-                      //   alertSound: alertSoundInput,
-                      //   publicRoute: publicRouteInput,
-                      //   meetingPoint: meetingPointInput,
-                      //   stops: stopsInput,
-                      //   onConfirm: createRoute,
-                      //   onCancel: () {
-                      //     setState(() {
-                      //       _currentStep = 0;
-                      //     });
-                      //   },
-                      // ),
-                      isActive: _currentStep >= 3)
-                ])));
+  bool _canCreateARoute({required BuildContext context}) {
+    if (_nameRoute.text.trim().isEmpty) {
+      showTopSnackBar(Overlay.of(context),
+          const CustomSnackBar.info(message: 'Por favor, ingrese un nombre'));
+    } else if (_descriptionRoute.text.trim().isEmpty) {
+      showTopSnackBar(
+          Overlay.of(context),
+          const CustomSnackBar.info(
+              message: 'Por favor, ingrese una descripción'));
+    } else if (_file == null) {
+      showTopSnackBar(Overlay.of(context),
+          const CustomSnackBar.info(message: 'Por favor, ingrese una imagen'));
+    } else if (_routeEntity.routeTypes.isEmpty) {
+      showTopSnackBar(
+          Overlay.of(context),
+          const CustomSnackBar.info(
+              message: 'Por favor, escoja al menos un tipo de ruta'));
+    } else if (_routeEntity.stops.isEmpty) {
+      showTopSnackBar(
+          Overlay.of(context),
+          const CustomSnackBar.info(
+              message: 'Por favor, ingrese al menos una parada'));
+    } else if (_routeEntity.latitude == 0 && _routeEntity.longitude == 0) {
+      showTopSnackBar(
+          Overlay.of(context),
+          const CustomSnackBar.info(
+              message: 'Por favor, seleccione un punto de encuentro'));
+    }
+
+    return _nameRoute.text.trim().isNotEmpty &&
+        _descriptionRoute.text.trim().isNotEmpty &&
+        _file != null &&
+        _routeEntity.routeTypes.isNotEmpty &&
+        _routeEntity.stops.isNotEmpty &&
+        _routeEntity.latitude != 0 &&
+        _routeEntity.longitude != 0;
   }
 }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_finder/core/injection_container.dart';
+import 'package:path_finder/core/theme/app_theme.dart';
 import 'package:path_finder/core/theme/theme_config.dart';
 import 'package:path_finder/core/widgets/custom_button_widget.dart';
 import 'package:path_finder/features/route/presentation/bloc/bloc.dart';
+import 'package:path_finder/features/route/presentation/screens/create_route_screen.dart';
 import 'package:path_finder/features/route/presentation/widgets/custom_bottom_navigation_bar_widget.dart';
 import 'package:path_finder/features/route/presentation/widgets/route_info_widget.dart';
 import 'package:path_finder/features/route/presentation/widgets/search_route_widget.dart';
@@ -17,10 +19,14 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   late String page;
 
   late ScrollController _scrollController;
+
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     super.initState();
@@ -36,19 +42,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     page = 'Home';
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,
-            title: const Text('Empecemos una aventura!',
-                textAlign: TextAlign.center, maxLines: 2)),
+            backgroundColor: colorSeed,
+            title: Text('Empecemos una aventura!',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: Colors.white))),
         body: BlocConsumer<UserBloc, UserState>(
             listener: (BuildContext context, UserState state) {},
             builder: (context, state) {
               return (state is UserAuthenticated)
                   ? Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding:
+                          const EdgeInsets.only(top: 16, left: 16, right: 16),
                       child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
@@ -83,13 +96,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium,
+                                          .bodyMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
                                       maxLines: 2)),
                               const SizedBox(width: 16),
                               CustomButtonWidget(
-                                  onTap: () {
-                                    GoRouter.of(context).go('/create-route');
-                                  },
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CreateRouteScreen())),
                                   color: teritoryColor_,
                                   label: 'Comparte tu ruta!')
                             ]),
@@ -101,8 +118,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: double.infinity,
                                 child: SearchRouteWidget()),
                             const SizedBox(height: 16),
-                            Text('Rutas disponibles',
-                                style: Theme.of(context).textTheme.titleMedium),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Rutas disponibles',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium),
+                                  IconButton(
+                                      onPressed: () {
+                                        if (sl<RoutesBloc>().state
+                                            is RoutesLoaded) {
+                                          sl<RoutesBloc>()
+                                              .add(GetRoutesEvent());
+                                        }
+                                      },
+                                      icon: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          decoration: BoxDecoration(
+                                              border:
+                                                  Border.all(color: colorSeed),
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          child: const Icon(Icons.refresh,
+                                              color: colorSeed)))
+                                ]),
                             const SizedBox(height: 8),
                             BlocConsumer<RoutesBloc, RoutesState>(
                                 listener: (BuildContext context,
@@ -134,9 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ]))
                   : const Center(child: CircularProgressIndicator());
             }),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(16),
-          child: CustomBottomNavigationBarWidget(page: page),
+        bottomNavigationBar: const Padding(
+          padding: EdgeInsets.all(16),
+          child: CustomBottomNavigationBarWidget(),
         ));
   }
 }
