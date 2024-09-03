@@ -26,6 +26,11 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+def dotenv = new Properties()
+file("../../.env").withInputStream { stream ->
+    dotenv.load(stream)
+}
+
 android {
     namespace = "com.example.path_finder"
     compileSdk = flutter.compileSdkVersion
@@ -45,6 +50,8 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+        manifestPlaceholders = [
+            GOOGLE_API_KEY: dotenv['GOOGLE_API_KEY']]
     }
 
     buildTypes {

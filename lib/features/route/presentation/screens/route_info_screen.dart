@@ -110,7 +110,7 @@ class _RouteInfoScreenState extends State<RouteInfoScreen> {
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const TourScreen())),
+                        builder: (context) => TourScreen(routeEntity: widget.routeEntity))),
                 color: teritoryColor_,
                 label: 'Ingresar al tour')));
   }
