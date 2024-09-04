@@ -11,6 +11,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path_finder/core/theme/theme.dart';
 import 'package:path_finder/core/utils/location_service.dart';
 import 'package:path_finder/features/route/domain/entities/route.dart';
+import 'package:path_finder/features/route/presentation/screens/end_tour_screen.dart';
+import 'package:path_finder/features/route/presentation/screens/waiting_screen.dart';
 import 'package:path_finder/main.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as mtk;
 import 'package:http/http.dart' as http;
@@ -35,7 +37,8 @@ class _TourScreenState extends State<TourScreen> with WidgetsBindingObserver {
   Marker? myLocationMarker;
   String _directions = '';
   String _distance = '';
-   List<Polyline> myRouteList = [];
+  List<Polyline> myRouteList = [];
+  int currentPlaceIndex = 0;
 
   @override
   void initState() {
@@ -44,7 +47,7 @@ class _TourScreenState extends State<TourScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _destinationMarker = Marker(
         markerId: MarkerId(widget.routeEntity.name),
-        position: LatLng(widget.routeEntity.stops[0].latitude, widget.routeEntity.stops[0].longitude),
+        position: LatLng(widget.routeEntity.stops[currentPlaceIndex].latitude, widget.routeEntity.stops[currentPlaceIndex].longitude),
       );
       markerList.add(_destinationMarker);
       setCustomIconForUserLocation();
@@ -261,8 +264,8 @@ void moveCameraToCurrentPosition() async {
   if (myPosition == null) return;
 
   final destinationLatLng = LatLng(
-    widget.routeEntity.stops[0].latitude,
-    widget.routeEntity.stops[0].longitude,
+    widget.routeEntity.stops[currentPlaceIndex].latitude,
+    widget.routeEntity.stops[currentPlaceIndex].longitude,
   );
 
   final distanceInMeters = Geolocator.distanceBetween(
@@ -280,14 +283,34 @@ void moveCameraToCurrentPosition() async {
  }
 
  void _updateUIForProximity() {
-  //widget.routeEntity.currentPlaceIndex +=1;
-  /*Navigator.of(context).push(
+  currentPlaceIndex +=1;
+  if(currentPlaceIndex<widget.routeEntity.stops.length){
+  setState(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _destinationMarker = Marker(
+        markerId: MarkerId(widget.routeEntity.name),
+        position: LatLng(widget.routeEntity.stops[currentPlaceIndex].latitude, widget.routeEntity.stops[currentPlaceIndex].longitude),
+      );
+      markerList.add(_destinationMarker);
+      setCustomIconForUserLocation();
+      if (mounted) setState(() {});
+      startListeningLocation();
+    });
+  });
+  Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => RouteStop(
-        stopName: activeTouristRoute.placesList[activeTouristRoute.currentPlaceIndex].name,
-      ),
+      builder: (context) => WaitingScreen(),
     ),
-  );*/
+  );
+  }
+  else {
+     Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => EndTourScreen(),
+    ),
+  );
+
+  }
   }
 
 
@@ -346,7 +369,7 @@ void moveCameraToCurrentPosition() async {
                 color: teritoryColorDark,
                 borderRadius: BorderRadius.only(topLeft: ui.Radius.circular(8), topRight: ui.Radius.circular(8)),
               ),
-              child: Text( "Proxima parada: ${widget.routeEntity.stops[0].name}" ,style: TextStyle(color: Colors.white ,fontWeight: FontWeight.bold) ,
+              child: Text( "Proxima parada: ${widget.routeEntity.stops[currentPlaceIndex].name}" ,style: TextStyle(color: Colors.white ,fontWeight: FontWeight.bold) ,
               ),
             ),
           ),
