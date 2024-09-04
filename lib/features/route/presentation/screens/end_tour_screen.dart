@@ -20,12 +20,13 @@ class _EndTourScreenState extends State<EndTourScreen> {
 
     @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope( canPop: false ,child:Scaffold(
       appBar: AppBar(
-            titleSpacing: 0,
+            titleSpacing: 10,
             backgroundColor: colorSeed,
             scrolledUnderElevation: 0,
             centerTitle: false,
+            automaticallyImplyLeading: false,
             title: Text("Esperando",
                 maxLines: 2,
                 textAlign: TextAlign.start,
@@ -33,20 +34,18 @@ class _EndTourScreenState extends State<EndTourScreen> {
                     .textTheme
                     .titleMedium!
                     .copyWith(color: Colors.white)),
-            leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back_ios, color: Colors.white))),
+            ),
       body: Padding(padding: const EdgeInsets.all(16),
                       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children:[
-           Text("Llegaste al fin de la ruta" ,style: Theme.of(context).textTheme.bodyLarge,),
-          SizedBox(height: 8),
+          Container(alignment: Alignment.center, child: Text("Llegaste al fin de la ruta" ,style: Theme.of(context).textTheme.bodyLarge,),), 
+          SizedBox(height: 20),
           CustomButtonWidget(onTap: ()=> {
           Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => HomeScreen(),
       ))}, color: colorSeed, label: "Ir al menú principal")])
           
-    ));
+    )));
   }
 }

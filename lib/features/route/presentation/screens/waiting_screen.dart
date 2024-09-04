@@ -19,30 +19,29 @@ class _WaitingScreenState extends State<WaitingScreen> {
 
     @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(canPop: false, child: Scaffold (
       appBar: AppBar(
-            titleSpacing: 0,
+            titleSpacing: 10,
             backgroundColor: colorSeed,
             scrolledUnderElevation: 0,
             centerTitle: false,
-            title: Text("Esperando",
+            automaticallyImplyLeading: false,
+            title: Text("En espera",
                 maxLines: 2,
                 textAlign: TextAlign.start,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
                     .copyWith(color: Colors.white)),
-            leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back_ios, color: Colors.white))),
+            ),
       body: Padding(padding: const EdgeInsets.all(16),
                       child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Estás en una parada" ,style: Theme.of(context).textTheme.bodyLarge,),
-                        SizedBox(height: 8),
+                        Container(alignment: Alignment.center ,child: Text("Estás en una parada" ,style: Theme.of(context).textTheme.bodyLarge,) ), 
+                        SizedBox(height: 20),
                         CustomButtonWidget(onTap: ()=> Navigator.pop(context), color: colorSeed, label: "Ir a la siguiente parada")],))
           
-    );
+    ));
   }
 }
