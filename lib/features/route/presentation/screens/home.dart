@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:path_finder/core/injection_container.dart';
 import 'package:path_finder/core/theme/app_theme.dart';
 import 'package:path_finder/core/theme/theme_config.dart';
@@ -21,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin {
-  late String page;
 
   late ScrollController _scrollController;
 
@@ -43,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    page = 'Home';
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,

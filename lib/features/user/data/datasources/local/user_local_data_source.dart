@@ -34,7 +34,8 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
     final userJson = box.get('UserModel');
     final value = userJson != null && userJson.isNotEmpty;
     if (value) {
-      return loadLocalUser();
+      final user = loadLocalUser();
+      return user;
     } else {
       return null;
     }

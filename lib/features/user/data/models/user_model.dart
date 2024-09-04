@@ -28,7 +28,11 @@ class UserModel extends User {
       'uid': uid,
       'email': email,
       'firstName': firstName,
-      'lastName': lastName
+      'lastName': lastName,
+      'urlphoto': urlphoto,
+      'description': description,
+      'phone': phone,
+      'rutas': rutas
     };
   }
 }

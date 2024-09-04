@@ -64,6 +64,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
         }, builder: (context, state) {
           if (state is UserAuthenticated && _description.text.isEmpty) {
             _description = TextEditingController(text: state.user.description);
+            _user = state.user;
           }
           return (state is UserAuthenticated)
               ? Padding(
@@ -97,8 +98,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                               },
                               child: CircleAvatar(
                                   radius: 80.rf(context),
-                                  foregroundImage:
-                                      NetworkImage(state.user.urlphoto),
+                                  
                                   backgroundImage: const AssetImage(
                                       'assets/img/placeholder.jpg')),
                             )),

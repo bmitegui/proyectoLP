@@ -32,9 +32,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<LogoutEvent>(_onLogoutEventRequest);
     on<UpdateDescriptionEvent>(_onUpdateDescriptionRequest);
     on<UpdateProfileImageEvent>(_onUpdateProfileImageRequest);
-      }
-
-       
+  }
 
   Future<void> _onUpdateProfileImageRequest(
       UpdateProfileImageEvent event, Emitter<UserState> emit) async {

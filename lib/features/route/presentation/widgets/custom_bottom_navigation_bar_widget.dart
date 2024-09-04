@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path_finder/core/theme/theme.dart';
+import 'package:path_finder/features/route/presentation/screens/rutas_screen.dart';
 import 'package:path_finder/features/user/presentation/screens/perfil_screen.dart';
 
 class CustomBottomNavigationBarWidget extends StatelessWidget {
@@ -25,7 +26,8 @@ class CustomBottomNavigationBarWidget extends StatelessWidget {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const PerfilScreen()));
           }else if(text =='Rutas'){
-            
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const RutasScreen()));
           }
         },
         child: SizedBox(
