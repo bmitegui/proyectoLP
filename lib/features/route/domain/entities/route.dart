@@ -5,6 +5,7 @@ enum RouteType { naturaleza, religion, gastronomia, ciudad, aventura, cultura }
 
 class RouteEntity extends Equatable {
   final String id;
+  final String userId;
   final String name;
   final String description;
   final String urlImage;
@@ -22,6 +23,7 @@ class RouteEntity extends Equatable {
 
   const RouteEntity(
       {required this.id,
+      required this.userId,
       required this.name,
       required this.description,
       required this.urlImage,
@@ -39,6 +41,7 @@ class RouteEntity extends Equatable {
 
   RouteEntity copyWith({
     String? id,
+    String? userId,
     String? name,
     String? description,
     String? urlImage,
@@ -56,6 +59,7 @@ class RouteEntity extends Equatable {
   }) {
     return RouteEntity(
         id: id ?? this.id,
+        userId: userId ?? this.userId,
         name: name ?? this.name,
         description: description ?? this.description,
         urlImage: urlImage ?? this.urlImage,
@@ -75,6 +79,7 @@ class RouteEntity extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'name': name,
       'description': description,
       'urlImage': urlImage,

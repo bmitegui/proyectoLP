@@ -9,7 +9,7 @@ class CustomBottomNavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       iconBottomNavigator(
-          context: context, text: 'Mis Rutas', icon: Icons.gps_fixed),
+          context: context, text: 'Rutas', icon: Icons.gps_fixed),
       iconBottomNavigator(context: context, text: 'Home', icon: Icons.home),
       iconBottomNavigator(context: context, text: 'Perfil', icon: Icons.person)
     ]);
@@ -24,6 +24,8 @@ class CustomBottomNavigationBarWidget extends StatelessWidget {
           if (text == 'Perfil') {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const PerfilScreen()));
+          }else if(text =='Rutas'){
+            
           }
         },
         child: SizedBox(

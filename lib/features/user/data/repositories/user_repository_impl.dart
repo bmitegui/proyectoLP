@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:path_finder/core/error/error.dart';
 import 'package:path_finder/core/network/network_info.dart';
@@ -79,6 +81,34 @@ class UserRepositoryImpl implements UserRepository {
     try {
       await userLocalDataSource.logout();
       return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateDescription(
+      {required String uid, required String description}) async {
+    try {
+      await userRemoteDataSource.updateDescription(
+          uid: uid, description: description);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> updateProfileImage(
+      {required String uid, required File file}) async {
+    try {
+      final url =
+          await userRemoteDataSource.updateProfileImage(uid: uid, file: file);
+      return Right(url);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } catch (e) {

@@ -68,7 +68,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                                   : Icons.visibility,
                               color: Colors.grey))
                       : null,
-                  contentPadding: const EdgeInsets.only(left: 16, top: 32),
+                  contentPadding:
+                      const EdgeInsets.only(left: 16, top: 32, right: 16),
                   hintStyle: Theme.of(context)
                       .textTheme
                       .bodyMedium!

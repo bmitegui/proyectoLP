@@ -31,3 +31,16 @@ final class RegisterEvent extends UserEvent {
 }
 
 final class CheckAuthStatusEvent extends UserEvent {}
+
+final class UpdateDescriptionEvent extends UserEvent {
+  final User user;
+  final String description;
+
+  UpdateDescriptionEvent({required this.user, required this.description});
+}
+
+final class UpdateProfileImageEvent extends UserEvent {
+  final User user;
+  final File file;
+  UpdateProfileImageEvent({required this.user, required this.file});
+}

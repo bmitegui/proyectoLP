@@ -35,6 +35,7 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                     children: [
                       Container(
                           clipBehavior: Clip.hardEdge,
+                          height: 150,
                           width: double.infinity,
                           decoration: BoxDecoration(
                               border: Border.all(
@@ -44,7 +45,7 @@ class _RouteInfoWidgetState extends State<RouteInfoWidget> {
                           child: FadeInImage.assetNetwork(
                               placeholder: 'assets/img/placeholder.jpg',
                               image: widget.route.urlImage,
-                              fit: BoxFit.fitWidth,
+                              fit: BoxFit.fill,
                               imageErrorBuilder: (context, error, stackTrace) {
                                 return const Center(
                                     child:

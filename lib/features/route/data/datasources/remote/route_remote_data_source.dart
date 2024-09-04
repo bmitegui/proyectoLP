@@ -6,6 +6,7 @@ import 'package:path_finder/core/constants/api_constants.dart';
 import 'package:path_finder/core/error/error.dart';
 import 'package:path_finder/features/route/data/models/models.dart';
 import 'package:path_finder/features/route/domain/entities/entities.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
 
 abstract class RouteRemoteDataSource {
   Future<List<RouteModel>> getRoutes();
@@ -21,7 +22,6 @@ class RouteRemoteDataSourceImpl implements RouteRemoteDataSource {
     try {
       final result = await cliente.get(getRoutesUrl,
           options: Options(contentType: Headers.jsonContentType));
-
       if (result.statusCode == 200) {
         final List<RouteModel> listRoutes = (result.data as List)
             .map((routeJson) => RouteModel.fromJson(routeJson))
@@ -50,8 +50,12 @@ class RouteRemoteDataSourceImpl implements RouteRemoteDataSource {
 
       route = route.copyWith(urlImage: downloadUrl);
 
+      Map<String, dynamic> routeMap = route.toJson();
+      final userId = fb.FirebaseAuth.instance.currentUser!.uid;
+      routeMap['userId'] = userId;
+
       final result = await cliente.post(createRouteUrl,
-          data: route.toJson(),
+          data: routeMap,
           options: Options(contentType: Headers.jsonContentType));
 
       final status = result.data['status'];
@@ -60,6 +64,7 @@ class RouteRemoteDataSourceImpl implements RouteRemoteDataSource {
         final id = result.data['id'];
         return RouteModel(
             id: id,
+            userId: route.userId,
             name: route.name,
             description: route.description,
             peopleNumber: route.peopleNumber,

@@ -34,6 +34,7 @@ class _CreateRouteState extends State<CreateRouteScreen> {
     _nameRoute = TextEditingController();
     _descriptionRoute = TextEditingController();
     _routeEntity = RouteEntity(
+        userId: '',
         id: '',
         name: '',
         description: '',

@@ -1,8 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_finder/core/error/error.dart';
-import 'package:path_finder/core/injection_container.dart';
 import 'package:path_finder/core/usecases/usecase.dart';
-import 'package:path_finder/features/route/presentation/bloc/bloc.dart';
 import 'package:path_finder/features/user/domain/entities/entities.dart';
 import 'package:path_finder/features/user/domain/usecases/usecases.dart';
 
@@ -14,18 +14,57 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final Register registerUseCase;
   final Logout logoutUseCase;
   final CheckUserAuthentication checkUserAuthentication;
+  final UpdateDescription updateDescriptionUseCase;
+  final UpdateProfileImage updateProfileImageUseCase;
 
   UserBloc(
       {required this.loginUseCase,
       required this.registerUseCase,
       required this.logoutUseCase,
-      required this.checkUserAuthentication})
+      required this.checkUserAuthentication,
+      required this.updateDescriptionUseCase,
+      required this.updateProfileImageUseCase})
       : super(UserInitial()) {
     on<UserInitialEvent>(_onUserInitialRequest);
     on<LoginEvent>(_onLoginEventRequest);
     on<RegisterEvent>(_onRegisterRequest);
     on<CheckAuthStatusEvent>(_onCheckAuthStatusRequest);
     on<LogoutEvent>(_onLogoutEventRequest);
+    on<UpdateDescriptionEvent>(_onUpdateDescriptionRequest);
+    on<UpdateProfileImageEvent>(_onUpdateProfileImageRequest);
+      }
+
+       
+
+  Future<void> _onUpdateProfileImageRequest(
+      UpdateProfileImageEvent event, Emitter<UserState> emit) async {
+    emit(UserLoading());
+    final failureOrSuccess = await updateProfileImageUseCase(
+        UpdateProfileImageParams(uid: event.user.uid, file: event.file));
+    failureOrSuccess.fold((failure) {
+      emit(UserError(message: _mapFailureToMessage(failure)));
+      emit(UserAuthenticated(user: event.user));
+    }, (urlPhoto) async {
+      emit(UserAuthenticated(
+          message: 'Foto guardada',
+          user: event.user.copyWith(urlphoto: urlPhoto)));
+    });
+  }
+
+  Future<void> _onUpdateDescriptionRequest(
+      UpdateDescriptionEvent event, Emitter<UserState> emit) async {
+    emit(UserLoading());
+    final failureOrSuccess = await updateDescriptionUseCase(
+        UpdateDescriptionParams(
+            uid: event.user.uid, description: event.description));
+    failureOrSuccess.fold((failure) {
+      emit(UserError(message: _mapFailureToMessage(failure)));
+      emit(UserAuthenticated(user: event.user));
+    }, (value) async {
+      emit(UserAuthenticated(
+          message: 'Descripción guardada',
+          user: event.user.copyWith(description: event.description)));
+    });
   }
 
   Future<void> _onLogoutEventRequest(

@@ -4,6 +4,7 @@ import 'package:path_finder/features/route/domain/entities/entities.dart';
 class RouteModel extends RouteEntity {
   const RouteModel(
       {required super.id,
+      required super.userId,
       required super.name,
       required super.description,
       required super.peopleNumber,
@@ -38,6 +39,7 @@ class RouteModel extends RouteEntity {
       }
     }
     return RouteModel(
+        userId: json['userId']??'',
         id: json['id'],
         name: json['name'],
         description: json['description'],

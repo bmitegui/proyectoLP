@@ -61,6 +61,10 @@ Future<void> init() async {
       () => Login(userRepository: sl<UserRepository>()));
   sl.registerLazySingleton<Logout>(
       () => Logout(userRepository: sl<UserRepository>()));
+  sl.registerLazySingleton<UpdateDescription>(
+      () => UpdateDescription(userRepository: sl<UserRepository>()));
+  sl.registerLazySingleton<UpdateProfileImage>(
+      () => UpdateProfileImage(userRepository: sl<UserRepository>()));
 
   sl.registerLazySingleton<GetRoutes>(
       () => GetRoutes(routeRepository: sl<RouteRepository>()));
@@ -72,7 +76,9 @@ Future<void> init() async {
       loginUseCase: sl<Login>(),
       registerUseCase: sl<Register>(),
       logoutUseCase: sl<Logout>(),
-      checkUserAuthentication: sl<CheckUserAuthentication>()));
+      checkUserAuthentication: sl<CheckUserAuthentication>(),
+      updateDescriptionUseCase: sl<UpdateDescription>(),
+      updateProfileImageUseCase: sl<UpdateProfileImage>()));
 
   sl.registerLazySingleton<RoutesBloc>(() => RoutesBloc(
       getRoutesUseCase: sl<GetRoutes>(),

@@ -10,7 +10,8 @@ final class UserLoading extends UserState {}
 
 final class UserAuthenticated extends UserState {
   final User user;
-  UserAuthenticated({required this.user});
+  final String? message;
+  UserAuthenticated({required this.user, this.message});
 }
 
 final class UserUnauthenticated extends UserState {}
